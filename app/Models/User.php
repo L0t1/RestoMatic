@@ -56,7 +56,10 @@ class User extends Authenticatable
     // Relationship with Restaurant model (User can own a Restaurant)
     public function restaurant()
     {
-        return $this->hasOne(Restaurant::class, 'owner_id');
+        if ($this->isOwnerUser()) {
+            return $this->hasOne(Restaurant::class, 'owner_id');
+        }
+        return null;
     }
 
     // Check if the user has the 'normal' role
