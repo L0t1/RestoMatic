@@ -20,12 +20,14 @@ class ReservationFactory extends Factory
     public function definition(): array
     {
         $dateTime = Carbon::now()->addDays(fake()->numberBetween(1, 30));
+        // Retrieve a random user from the database
+        $user = User::inRandomOrder()->first();
         return [
             'reservation_date' => $dateTime->format('Y-m-d'),
             'reservation_time' => $dateTime->format('H:i:s'),
-            'guest_name' => fake()->name(),
-            'guest_email' => fake()->email(),
-            'guest_phone' => fake()->phoneNumber(),
+            'guest_name' => $user->name,
+            'guest_email' => $user->email,
+            'guest_phone' => $user->phone,
             'party_size' => fake()->numberBetween(1, 10),
             'special_requests' => fake()->sentence(),
             'status' => fake()->randomElement(['confirmed', 'canceled', 'pending']),
