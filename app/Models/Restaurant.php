@@ -13,8 +13,22 @@ class Restaurant extends Model
 
     protected $fillable = [
         'name',
+        'tag',
         'address',
         'owner_id'
         // Add other fillable attributes
     ];
+
+    // Relationship with Reservation model (Restaurant has many Reservations)
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
+
+    // Relationship with User model (Restaurant belongs to an Owner/User)
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
+
 }

@@ -18,6 +18,7 @@ class RestaurantFactory extends Factory
     {
         return [
             'name' => fake()->name(),
+            'tag' => fake()->unique()->name(),
             'address' => fake()->address(),
         ];
     }
