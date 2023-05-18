@@ -21,11 +21,20 @@ class ReservationFactory extends Factory
     {
         $dateTime = Carbon::now()->addDays(fake()->numberBetween(1, 30));
         return [
-            'user_id' => User::inRandomOrder()->first()->id,
-            'restaurant_id' => Restaurant::inRandomOrder()->first()->id,
-            'datetime' => $dateTime,
+            'reservation_date' => $dateTime->format('Y-m-d'),
+            'reservation_time' => $dateTime->format('H:i:s'),
+            'guest_name' => fake()->name(),
+            'guest_email' => fake()->email(),
+            'guest_phone' => fake()->phoneNumber(),
             'party_size' => fake()->numberBetween(1, 10),
-        // Add other reservation attributes
+            'special_requests' => fake()->sentence(),
+            'status' => fake()->randomElement(['confirmed', 'canceled', 'pending']),
+            'user_id' => function () {
+                return User::inRandomOrder()->first()->id;
+                },
+            'restaurant_id' => function () {
+                return Restaurant::inRandomOrder()->first()->id;
+                },
         ];
     }
 }

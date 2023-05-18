@@ -13,16 +13,17 @@ return new class extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('restaurant_id');
-            $table->dateTime('datetime');
+            $table->date('reservation_date');
+            $table->time('reservation_time');
+            $table->string('guest_name');
+            $table->string('guest_email');
+            $table->string('guest_phone');
             $table->integer('party_size');
-            // Add other reservation columns
-
+            $table->text('special_requests')->nullable();
+            $table->string('status')->default('pending');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('restaurant_id')->constrained()->onDelete('cascade');
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('restaurant_id')->references('id')->on('restaurants')->onDelete('cascade');
         });
     }
 
