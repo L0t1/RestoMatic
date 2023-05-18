@@ -13,8 +13,17 @@ class Restaurant extends Model
 
     protected $fillable = [
         'name',
-        'tag',
+        'description',
         'address',
+        'city',
+        'state',
+        'zipcode',
+        'phone',
+        'website',
+        'opening_hours',
+        'cuisine',
+        'price_range',
+        'capacity',
         'owner_id'
         // Add other fillable attributes
     ];
