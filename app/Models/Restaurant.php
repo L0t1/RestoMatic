@@ -9,24 +9,11 @@ class Restaurant extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     protected $table = 'restaurants';
 
-    protected $fillable = [
-        'name',
-        'description',
-        'address',
-        'city',
-        'state',
-        'zipcode',
-        'phone',
-        'website',
-        'opening_hours',
-        'cuisine',
-        'price_range',
-        'capacity',
-        'owner_id'
-        // Add other fillable attributes
-    ];
+
 
     // Relationship with Reservation model (Restaurant has many Reservations)
     public function reservations()
@@ -37,7 +24,7 @@ class Restaurant extends Model
     // Relationship with User model (Restaurant belongs to an Owner/User)
     public function user()
     {
-        return $this->belongsTo(User::class, 'owner_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
 }

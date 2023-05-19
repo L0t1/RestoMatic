@@ -21,13 +21,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'phone',
-        'password',
-        'role',
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -58,7 +52,7 @@ class User extends Authenticatable
     public function restaurant()
     {
         if ($this->isOwnerUser()) {
-            return $this->hasOne(Restaurant::class, 'owner_id');
+            return $this->hasOne(Restaurant::class, 'user_id');
         }
         return null;
     }
