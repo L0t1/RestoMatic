@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id');
+            $table->foreignId('restaurant_id');
             $table->date('reservation_date');
             $table->time('reservation_time');
             $table->string('guest_name');
@@ -21,8 +23,6 @@ return new class extends Migration
             $table->integer('party_size');
             $table->text('special_requests')->nullable();
             $table->string('status')->default('pending');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('restaurant_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

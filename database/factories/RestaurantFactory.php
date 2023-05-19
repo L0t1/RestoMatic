@@ -30,7 +30,7 @@ class RestaurantFactory extends Factory
             'cuisine' => fake()->randomElement(['Italian', 'Mexican', 'Chinese', 'Indian']),
             'price_range' => fake()->randomElement(['Affordable', 'Moderate', 'Expensive']),
             'capacity' => fake()->numberBetween(20, 100),
-            'owner_id' => function () {
+            'user_id' => function () {
                 return User::inRandomOrder()->where('role', 'owner')->first()->id;
       }];
     }

@@ -13,22 +13,21 @@ return new class extends Migration
     {
         Schema::create('restaurants', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->nullable();
             $table->string('name');
             $table->text('description');
             $table->string('address');
             $table->string('city');
             $table->string('state');
-            $table->string('zipcode');
+            $table->string('zipcode')->nullable();
             $table->string('phone');
-            $table->string('website');
+            $table->string('website')->nullable();
             $table->string('opening_hours');
-            $table->string('cuisine');
-            $table->string('price_range');
+            $table->string('cuisine')->nullable();
+            $table->string('price_range')->nullable();
             $table->unsignedInteger('capacity');
-            $table->unsignedBigInteger('owner_id');
             $table->timestamps();
 
-            $table->foreign('owner_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
