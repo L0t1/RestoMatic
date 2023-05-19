@@ -1,64 +1,102 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use App\Models\Restaurant;
 use Illuminate\Http\Request;
 
 class RestaurantController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $restaurants = Restaurant::all();
+        return response()->json(['restaurants' => $restaurants]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'address' => 'nullable',
+            'city' => 'required',
+            'state' => 'required',
+            'zipcode' => 'nullable',
+            'phone' => 'required',
+            'website' => 'nullable',
+            'opening_hours' => 'required',
+            'cuisine' => 'nullable',
+            'price_range' => 'nullable',
+            'capacity' => 'required|integer',
+        ]);
+
+        $restaurant = new Restaurant();
+        // Set the restaurant attributes from the request data
+        $restaurant->name = $request->input('name');
+        $restaurant->description = $request->input('description');
+        $restaurant->address = $request->input('address');
+        $restaurant->city = $request->input('city');
+        $restaurant->state = $request->input('state');
+        $restaurant->zipcode = $request->input('zipcode');
+        $restaurant->phone = $request->input('phone');
+        $restaurant->website = $request->input('website');
+        $restaurant->opening_hours = $request->input('opening_hours');
+        $restaurant->cuisine = $request->input('cuisine');
+        $restaurant->price_range = $request->input('price_range');
+        $restaurant->capacity = $request->input('capacity');
+        // Save the restaurant
+        $restaurant->save();
+
+        return response()->json([
+            'message' => 'Restaurant created successfully',
+            'restaurant' => $restaurant,
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Restaurant $restaurant)
     {
-        //
+        return response()->json(['restaurant' => $restaurant]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, Restaurant $restaurant)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'address' => 'nullable',
+            'city' => 'required',
+            'state' => 'required',
+            'zipcode' => 'nullable',
+            'phone' => 'required',
+            'website' => 'nullable',
+            'opening_hours' => 'required',
+            'cuisine' => 'nullable',
+            'price_range' => 'nullable',
+            'capacity' => 'required|integer',
+        ]);
+
+        // Update the restaurant attributes from the request data
+        $restaurant->name = $request->input('name');
+        $restaurant->description = $request->input('description');
+        $restaurant->address = $request->input('address');
+        $restaurant->city = $request->input('city');
+        $restaurant->state = $request->input('state');
+        $restaurant->zipcode = $request->input('zipcode');
+        $restaurant->phone = $request->input('phone');
+        $restaurant->website = $request->input('website');
+        $restaurant->opening_hours = $request->input('opening_hours');
+        $restaurant->cuisine = $request->input('cuisine');
+        $restaurant->price_range = $request->input('price_range');
+        $restaurant->capacity = $request->input('capacity');
+        // Save the changes
+        $restaurant->save();
+
+        return response()->json(['message' => 'Restaurant updated successfully']);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Restaurant $restaurant)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        // Delete the restaurant
+        $restaurant->delete();
+        return response()->json(['message' => 'Restaurant deleted successfully']);
     }
 }
