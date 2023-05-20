@@ -1,12 +1,12 @@
 import * as React from "react";
-import Form from "@/Components/Form";
+import ReservationList from "@/Components/ReservationList";
 
 export default function Test() {
     return (
         <>
-            <Form>
-            </Form>
+            <ReservationList>
+            </ReservationList>
         </>
-  
+
     );
 }
