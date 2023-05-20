@@ -30,7 +30,7 @@ class ReservationFactory extends Factory
             'guest_phone' => $user->phone,
             'party_size' => fake()->numberBetween(1, 10),
             'special_requests' => fake()->sentence(),
-            'status' => fake()->randomElement(['confirmed', 'canceled', 'pending']),
+            'status' => fake()->randomElement(['Confirmed', 'Cancelled', 'Pending']),
             'user_id' => function () {
                 return User::inRandomOrder()->first()->id;
                 },
