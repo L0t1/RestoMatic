@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RestaurantController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -17,21 +18,16 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
-
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    return Inertia::render('Index');
+})->middleware('auth', 'verified')->name('index');;
 
 Route::get('/test', function () {
     return Inertia::render('Test');
-})->name('test');
+})->middleware('auth', 'verified')->name('test');
+
+Route::get('/restaurants', function(){
+    return Inertia::render('Restaurants');
+})->middleware('auth', 'verified')->name('test');
 
 Route::get('/reservation', function () {
     return Inertia::render('Reservation');
