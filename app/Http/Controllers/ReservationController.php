@@ -55,17 +55,18 @@ class ReservationController extends Controller
     public function update(Request $request, Reservation $reservation)
     {
         $request->validate([
-            'user_id' => 'required',
-            'restaurant_id' => 'required',
-            'reservation_date' => 'required|date',
-            'reservation_time' => 'required',
-            'guest_name' => 'required',
-            'guest_email' => 'required|email',
-            'guest_phone' => 'required',
-            'party_size' => 'required|integer',
+            'user_id' => 'sometimes|required',
+            'restaurant_id' => 'sometimes|required',
+            'reservation_date' => 'sometimes|required|date',
+            'reservation_time' => 'sometimes|required',
+            'guest_name' => 'sometimes|required',
+            'guest_email' => 'sometimes|required|email',
+            'guest_phone' => 'sometimes|required',
+            'party_size' => 'sometimes|required|integer',
             'special_requests' => 'nullable',
             'status' => 'nullable',
         ]);
+
 
         $reservation->user_id = $request->input('user_id');
         $reservation->restaurant_id = $request->input('restaurant_id');
@@ -86,5 +87,17 @@ class ReservationController extends Controller
     {
         $reservation->delete();
         return response()->json(['message' => 'Reservation deleted successfully']);
+    }
+
+    public function updateStatus(Request $request, Reservation $reservation)
+    {
+        $request->validate([
+            'status' => 'required|in:Pending,Confirmed,Cancelled',
+        ]);
+
+        $reservation->status = $request->input('status');
+        $reservation->save();
+
+        return response()->json(['message' => 'Reservation status updated successfully']);
     }
 }

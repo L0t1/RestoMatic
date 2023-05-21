@@ -32,14 +32,17 @@ Route::put('/restaurants/{restaurant}', [RestaurantController::class, 'update'])
 Route::delete('/restaurants/{restaurant}', [RestaurantController::class, 'destroy']);
 
 
+// Retrieve all reservations
+Route::get('/reservations', [ReservationController::class, 'index']);
+// Create a new reservation
+Route::post('/reservations', [ReservationController::class, 'store']);
+// Retrieve a specific reservation
+Route::get('/reservations/{reservation}', [ReservationController::class, 'show']);
+// Update a reservation
+Route::put('/reservations/{reservation}', [ReservationController::class, 'update']);
+// Delete a reservation
+Route::delete('/reservations/{reservation}', [ReservationController::class, 'destroy']);
 
-    // Retrieve all reservations
-    Route::get('/reservations', [ReservationController::class, 'index']);
-    // Create a new reservation
-    Route::post('/reservations', [ReservationController::class, 'store']);
-    // Retrieve a specific reservation
-    Route::get('/reservations/{reservation}', [ReservationController::class, 'show']);
-    // Update a reservation
-    Route::put('/reservations/{reservation}', [ReservationController::class, 'update']);
-    // Delete a reservation
-    Route::delete('/reservations/{reservation}', [ReservationController::class, 'destroy']);
+//Status
+Route::put('/reservations/{reservation}/update-status', [ReservationController::class, 'updateStatus']);
+
