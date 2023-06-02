@@ -4,6 +4,23 @@ import { TimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import axios from 'axios';
+import * as yup from 'yup';
+
+const validationSchema = yup.object({
+    user_id: yup.string().required('User ID is required'),
+    restaurant_id: yup.string().required('Restaurant ID is required'),
+    date: yup.string().required('Reservation Date is required'),
+    time: yup.string().required('Reservation Time is required'),
+    name: yup.string().required('Guest Name is required'),
+    email: yup.string().email('Invalid email').required('Guest Email is required'),
+    phone: yup.string().required('Guest Phone is required'),
+    partySize: yup
+      .number()
+      .transform((value, originalValue) => (originalValue.trim() === '' ? null : value))
+      .required('Party Size is required'),
+  });
+
+
 
 const ReservationForm = () => {
   const [user_id, setUserId] = useState('');
@@ -15,9 +32,9 @@ const ReservationForm = () => {
   const [phone, setPhone] = useState('');
   const [partySize, setPartySize] = useState('');
   const [specialRequests, setSpecialRequests] = useState('');
+  const [errors, setErrors] = useState({});
 
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const formattedTime = time ? time.format('HH:mm:ss') : null;
 
@@ -33,16 +50,22 @@ const ReservationForm = () => {
       special_requests: specialRequests,
     };
 
-    axios
-      .post('/api/reservations', reservationData)
-      .then((response) => {
+    try {
+      await validationSchema.validate(reservationData, { abortEarly: false });
+      setErrors({}); // Clear previous errors
+
+      // Submit the form
+      axios.post('/api/reservations', reservationData).then((response) => {
         console.log('Success:', response.data);
         // Handle successful submission
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-        // Handle error
       });
+    } catch (validationErrors) {
+      const errors = {};
+      validationErrors.inner.forEach((error) => {
+        errors[error.path] = error.message;
+      });
+      setErrors(errors);
+    }
   };
 
   return (
@@ -55,6 +78,8 @@ const ReservationForm = () => {
           margin="normal"
           value={user_id}
           onChange={(e) => setUserId(e.target.value)}
+          error={!!errors.user_id}
+          helperText={errors.user_id}
         />
         <TextField
           label="Restaurant ID"
@@ -62,6 +87,8 @@ const ReservationForm = () => {
           margin="normal"
           value={restaurant_id}
           onChange={(e) => setRestaurantId(e.target.value)}
+          error={!!errors.restaurant_id}
+          helperText={errors.restaurant_id}
         />
         <TextField
           label="Reservation Date"
@@ -70,12 +97,16 @@ const ReservationForm = () => {
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
+          error={!!errors.date}
+          helperText={errors.date}
         />
         <TimePicker
           label="Reservation Time"
           value={time}
           onChange={(newValue) => setTime(newValue)}
           renderInput={(params) => <TextField {...params} />}
+          error={!!errors.time}
+          helperText={errors.time}
         />
         <TextField
           label="Guest Name"
@@ -83,6 +114,8 @@ const ReservationForm = () => {
           margin="normal"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          error={!!errors.name}
+          helperText={errors.name}
         />
         <TextField
           label="Guest Email"
@@ -91,6 +124,8 @@ const ReservationForm = () => {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          error={!!errors.email}
+          helperText={errors.email}
         />
         <TextField
           label="Guest Phone"
@@ -99,6 +134,8 @@ const ReservationForm = () => {
           type="tel"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
+          error={!!errors.phone}
+          helperText={errors.phone}
         />
         <TextField
           label="Party Size"
@@ -107,6 +144,8 @@ const ReservationForm = () => {
           type="number"
           value={partySize}
           onChange={(e) => setPartySize(e.target.value)}
+          error={!!errors.party_size}
+          helperText={errors.party_size}
         />
         <TextField
           label="Special Requests"
