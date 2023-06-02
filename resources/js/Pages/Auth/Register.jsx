@@ -12,6 +12,8 @@ export default function Register() {
         email: '',
         password: '',
         password_confirmation: '',
+        role: 'normal', // Set the initial value to 'normal'
+        phone: '', // New field: phone
     });
 
     useEffect(() => {
@@ -97,6 +99,41 @@ export default function Register() {
                     />
 
                     <InputError message={errors.password_confirmation} className="mt-2" />
+                </div>
+
+                <div className="mt-4">
+                    <InputLabel htmlFor="role" value="Role" />
+
+                    <select
+                        id="role"
+                        name="role"
+                        value={data.role}
+                        className="mt-1 block w-full"
+                        onChange={(e) => setData('role', e.target.value)}
+                        required
+                    >
+                        <option value="normal">Normal</option>
+                        <option value="owner">Owner</option>
+                    </select>
+
+                    <InputError message={errors.role} className="mt-2" />
+                </div>
+
+                <div className="mt-4">
+                    <InputLabel htmlFor="phone" value="Phone" />
+
+                    <TextInput
+                        id="phone"
+                        type="tel"
+                        name="phone"
+                        value={data.phone}
+                        className="mt-1 block w-full"
+                        autoComplete="tel"
+                        onChange={(e) => setData('phone', e.target.value)}
+                        required
+                    />
+
+                    <InputError message={errors.phone} className="mt-2" />
                 </div>
 
                 <div className="flex items-center justify-end mt-4">

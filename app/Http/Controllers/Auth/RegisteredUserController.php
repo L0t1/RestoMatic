@@ -26,7 +26,7 @@ class RegisteredUserController extends Controller
 
     /**
      * Handle an incoming registration request.
-     *
+    *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request): RedirectResponse
@@ -35,11 +35,16 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role' => 'required|string',
+            'phone' => 'required|string',
+
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'role' => $request->role,
+            'phone' => $request->phone,
             'password' => Hash::make($request->password),
         ]);
 
