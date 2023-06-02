@@ -7,47 +7,45 @@ import axios from 'axios';
 import * as yup from 'yup';
 
 const validationSchema = yup.object({
-    user_id: yup.string().required('User ID is required'),
-    restaurant_id: yup.string().required('Restaurant ID is required'),
-    date: yup.string().required('Reservation Date is required'),
-    time: yup.string().required('Reservation Time is required'),
-    name: yup.string().required('Guest Name is required'),
-    email: yup.string().email('Invalid email').required('Guest Email is required'),
-    phone: yup.string().required('Guest Phone is required'),
-    partySize: yup
-      .number()
-      .transform((value, originalValue) => (originalValue.trim() === '' ? null : value))
-      .required('Party Size is required'),
-  });
-
-
+  user_id: yup.string().required('User ID is required'),
+  restaurant_id: yup.string().required('Restaurant ID is required'),
+  reservation_date: yup.string().required('Reservation Date is required'),
+  reservation_time: yup.string().required('Reservation Time is required'),
+  guest_name: yup.string().required('Guest Name is required'),
+  guest_email: yup.string().email('Invalid email').required('Guest Email is required'),
+  guest_phone: yup.string().required('Guest Phone is required'),
+  party_size: yup
+    .number()
+    .transform((value, originalValue) => (originalValue.trim() === '' ? null : value))
+    .required('Party Size is required'),
+});
 
 const ReservationForm = () => {
   const [user_id, setUserId] = useState('');
   const [restaurant_id, setRestaurantId] = useState('');
-  const [date, setDate] = useState('');
-  const [time, setTime] = useState(null);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [partySize, setPartySize] = useState('');
-  const [specialRequests, setSpecialRequests] = useState('');
+  const [reservation_date, setReservationDate] = useState('');
+  const [reservation_time, setReservationTime] = useState(null);
+  const [guest_name, setGuestName] = useState('');
+  const [guest_email, setGuestEmail] = useState('');
+  const [guest_phone, setGuestPhone] = useState('');
+  const [party_size, setPartySize] = useState('');
+  const [special_requests, setSpecialRequests] = useState('');
   const [errors, setErrors] = useState({});
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const formattedTime = time ? time.format('HH:mm:ss') : null;
+    const formattedTime = reservation_time ? reservation_time.format('HH:mm:ss') : null;
 
     const reservationData = {
       user_id,
       restaurant_id,
-      reservation_date: date,
+      reservation_date,
       reservation_time: formattedTime,
-      guest_name: name,
-      guest_email: email,
-      guest_phone: phone,
-      party_size: partySize,
-      special_requests: specialRequests,
+      guest_name,
+      guest_email,
+      guest_phone,
+      party_size,
+      special_requests,
     };
 
     try {
@@ -55,10 +53,15 @@ const ReservationForm = () => {
       setErrors({}); // Clear previous errors
 
       // Submit the form
-      axios.post('/api/reservations', reservationData).then((response) => {
-        console.log('Success:', response.data);
-        // Handle successful submission
-      });
+      axios.post('/api/reservations', reservationData)
+        .then((response) => {
+          console.log('Success:', response.data);
+          // Handle successful submission
+        })
+        .catch((error) => {
+          console.error('Error:', error.response.data);
+          // Handle error
+        });
     } catch (validationErrors) {
       const errors = {};
       validationErrors.inner.forEach((error) => {
@@ -95,54 +98,54 @@ const ReservationForm = () => {
           fullWidth
           margin="normal"
           type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          error={!!errors.date}
-          helperText={errors.date}
+          value={reservation_date}
+          onChange={(e) => setReservationDate(e.target.value)}
+          error={!!errors.reservation_date}
+          helperText={errors.reservation_date}
         />
         <TimePicker
           label="Reservation Time"
-          value={time}
-          onChange={(newValue) => setTime(newValue)}
+          value={reservation_time}
+          onChange={(newValue) => setReservationTime(newValue)}
           renderInput={(params) => <TextField {...params} />}
-          error={!!errors.time}
-          helperText={errors.time}
+          error={!!errors.reservation_time}
+          helperText={errors.reservation_time}
         />
         <TextField
           label="Guest Name"
           fullWidth
           margin="normal"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          error={!!errors.name}
-          helperText={errors.name}
+          value={guest_name}
+          onChange={(e) => setGuestName(e.target.value)}
+          error={!!errors.guest_name}
+          helperText={errors.guest_name}
         />
         <TextField
           label="Guest Email"
           fullWidth
           margin="normal"
           type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          error={!!errors.email}
-          helperText={errors.email}
+          value={guest_email}
+          onChange={(e) => setGuestEmail(e.target.value)}
+          error={!!errors.guest_email}
+          helperText={errors.guest_email}
         />
         <TextField
           label="Guest Phone"
           fullWidth
           margin="normal"
           type="tel"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          error={!!errors.phone}
-          helperText={errors.phone}
+          value={guest_phone}
+          onChange={(e) => setGuestPhone(e.target.value)}
+          error={!!errors.guest_phone}
+          helperText={errors.guest_phone}
         />
         <TextField
           label="Party Size"
           fullWidth
           margin="normal"
           type="number"
-          value={partySize}
+          value={party_size}
           onChange={(e) => setPartySize(e.target.value)}
           error={!!errors.party_size}
           helperText={errors.party_size}
@@ -152,7 +155,7 @@ const ReservationForm = () => {
           fullWidth
           margin="normal"
           multiline
-          value={specialRequests}
+          value={special_requests}
           onChange={(e) => setSpecialRequests(e.target.value)}
         />
         <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
